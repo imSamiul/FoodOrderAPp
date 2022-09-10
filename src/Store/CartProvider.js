@@ -6,10 +6,23 @@ const defaultCartState = {
   totalAmount: 0,
 };
 const cartReducer = (state, action) => {
+  console.log(state.items);
   if (action.type === "ADD") {
-    const updatedItems = state.items.concat(action.item);
+    const existingItemIndex = state.items.findIndex(
+      (item) => item.id === action.item.id
+    );
+    let updatedItems;
+    if (existingItemIndex > -1) {
+      state.items[existingItemIndex].amount =
+        state.items[existingItemIndex].amount + action.item.amount;
+      console.log(existingItemIndex);
+      updatedItems = state.items.concat(action.item);
+      // updatedItems = [...(state.items[existingItemIndex] = changedItem)];
+    } else {
+      updatedItems = state.items.concat(action.item);
+    }
     const updatedTotalAmount =
-      state.items.totalAmount + action.item.price * action.item.amount;
+      state.totalAmount + action.item.price * action.item.amount;
     return {
       items: updatedItems,
       totalAmount: updatedTotalAmount,
