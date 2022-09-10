@@ -11,13 +11,13 @@ const cartReducer = (state, action) => {
       (item) => item.id === action.item.id
     );
     let willGetUpdated = state.items[existingItemIndex];
-    let updatedItems = state.items;
+    let updatedItems;
     if (willGetUpdated) {
       const updatedItem = {
         ...willGetUpdated,
         amount: willGetUpdated.amount + action.item.amount,
       };
-
+      updatedItems = [...state.items];
       updatedItems[existingItemIndex] = updatedItem;
     } else {
       updatedItems = state.items.concat(action.item);
@@ -29,23 +29,21 @@ const cartReducer = (state, action) => {
       totalAmount: updatedTotalAmount,
     };
   } else if (action.type === "REMOVE") {
-    let updatedItems = state.items;
+    let updatedItems = [...state.items];
     let updatedTotalAmount = state.totalAmount;
     const existingItemIndex = state.items.findIndex(
       (item) => item.id === action.id
     );
     let willGetUpdated = state.items[existingItemIndex];
+    updatedTotalAmount = state.totalAmount - willGetUpdated.price;
     if (state.items[existingItemIndex].amount === 1) {
       updatedItems = state.items.filter((item) => item.id !== action.id);
-      updatedTotalAmount =
-        state.totalAmount - state.items[existingItemIndex].price;
     } else {
       const updatedItem = {
         ...willGetUpdated,
         amount: willGetUpdated.amount - 1,
       };
       updatedItems[existingItemIndex] = updatedItem;
-      updatedTotalAmount = state.totalAmount - willGetUpdated.price;
     }
     return {
       items: updatedItems,
