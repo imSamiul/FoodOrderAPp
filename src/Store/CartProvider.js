@@ -39,6 +39,7 @@ const CartProvider = (props) => {
   );
 
   const addItemToCartHandler = (item) => {
+    console.log(item);
     dispatchCartAction({ type: "ADD", item: item });
   };
   const removeItemToCartHandler = (item) => {};
